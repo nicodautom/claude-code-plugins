@@ -1,7 +1,6 @@
 ---
 name: task-status-manager
-description: >
-  Úsalo cuando el usuario necesite cambiar el estado de una tarea (ej. completada, en progreso, bloqueada) o agregar comentarios de seguimiento en Zoho Sprints.
+description: "Úsalo cuando el usuario necesite cambiar el estado de una tarea (ej. completada, en progreso, bloqueada) o agregar comentarios de seguimiento en Zoho Sprints."
 ---
 
 # Task & Status Manager Execution

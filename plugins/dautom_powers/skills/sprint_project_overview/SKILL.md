@@ -1,7 +1,6 @@
 ---
 name: sprint-project-overview
-description: >
-  Úsalo para generar reportes estructurados sobre el progreso y estado general de un sprint activo o proyecto en Zoho Sprints.
+description: "Úsalo para generar reportes estructurados sobre el progreso y estado general de un sprint activo o proyecto en Zoho Sprints."
 ---
 
 # Sprint & Project Overview Execution

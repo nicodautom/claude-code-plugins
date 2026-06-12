@@ -1,7 +1,6 @@
 ---
 name: daily-report
-description: >
-  Úsalo para recopilar las notas modificadas recientemente en Obsidian, elaborar un resumen estructurado del día e inyectarlo en la Nota Diaria correspondiente.
+description: "Úsalo para recopilar las notas modificadas recientemente en Obsidian, elaborar un resumen estructurado del día e inyectarlo en la Nota Diaria correspondiente."
 ---
 
 # Daily Report Generator Execution

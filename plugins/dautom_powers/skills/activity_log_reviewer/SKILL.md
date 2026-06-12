@@ -1,7 +1,6 @@
 ---
 name: activity-log-reviewer
-description: >
-  Úsalo para consultar, consolidar y reportar registros de tiempo (time logs) y la actividad realizada por el usuario en Zoho Sprints en un periodo de tiempo determinado.
+description: "Úsalo para consultar, consolidar y reportar registros de tiempo (time logs) y la actividad realizada por el usuario en Zoho Sprints en un periodo de tiempo determinado."
 ---
 
 # Activity & Log Reviewer Execution

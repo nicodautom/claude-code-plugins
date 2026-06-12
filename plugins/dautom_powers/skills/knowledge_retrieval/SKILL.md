@@ -1,7 +1,6 @@
 ---
 name: knowledge-retrieval
-description: >
-  Úsalo cuando necesites buscar, consultar o resumir información específica dentro de la base de conocimientos de Obsidian para responder preguntas.
+description: "Úsalo cuando necesites buscar, consultar o resumir información específica dentro de la base de conocimientos de Obsidian para responder preguntas."
 ---
 
 # Knowledge Retrieval & Q&A Execution

@@ -1,7 +1,6 @@
 ---
 name: time-activity-logger
-description: >
-  Úsalo cuando el usuario necesite registrar horas trabajadas (de forma general o asociadas a una tarea específica) en Zoho Sprints.
+description: "Úsalo cuando el usuario necesite registrar horas trabajadas (de forma general o asociadas a una tarea específica) en Zoho Sprints."
 ---
 
 # Time & Activity Logger Execution
