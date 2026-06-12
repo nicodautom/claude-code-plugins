@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dautom-powers",
+  "description": "Plugin de gestión de proyectos y base de conocimientos. Permite administrar tareas y registrar horas en Zoho Sprints, y buscar o reportar actividades en Obsidian.",
+  "owner": {
+    "name": "nicodautom",
+    "email": "nicolas.serrano@dautom.com.co"
+  },
+  "plugins": [
+    {
+      "name": "dautom-powers",
+      "description": "Facilita la administración de proyectos, actividades, registros de tiempo y tareas en Zoho Sprints, y la consulta/actualización estructurada de notas en Obsidian.",
+      "version": "1.0.0",
+      "source": "./plugins/dautom_powers",
+      "category": "productivity"
+    }
+  ]
+}
