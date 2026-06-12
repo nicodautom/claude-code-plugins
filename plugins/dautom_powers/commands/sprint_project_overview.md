@@ -1,3 +1,8 @@
+---
+name: sprint-project-overview
+description: "Muestra un resumen de tareas y estado del sprint activo en Zoho Sprints."
+---
+
 # Command: Sprint & Project Overview
 
 ## Descripción

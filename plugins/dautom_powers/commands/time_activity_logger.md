@@ -1,3 +1,8 @@
+---
+name: time-activity-logger
+description: "Registra horas trabajadas en una tarea específica o de forma general en Zoho Sprints."
+---
+
 # Command: Time & Activity Logger
 
 ## Descripción

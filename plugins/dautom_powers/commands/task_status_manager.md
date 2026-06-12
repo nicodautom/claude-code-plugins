@@ -1,3 +1,8 @@
+---
+name: task-status-manager
+description: "Actualiza el estado de una tarea y añade comentarios en Zoho Sprints."
+---
+
 # Command: Task & Status Manager
 
 ## Descripción

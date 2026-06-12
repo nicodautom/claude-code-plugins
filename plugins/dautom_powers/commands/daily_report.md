@@ -1,3 +1,8 @@
+---
+name: daily-report
+description: "Genera el reporte diario de notas modificadas y lo añade a la Nota Diaria de Obsidian."
+---
+
 # Command: Daily Report Generator
 
 ## Descripción

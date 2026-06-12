@@ -1,3 +1,8 @@
+---
+name: knowledge-retrieval
+description: "Busca y resume información dentro de la base de conocimientos de Obsidian."
+---
+
 # Command: Knowledge Retrieval & Q&A
 
 ## Descripción

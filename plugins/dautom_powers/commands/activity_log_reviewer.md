@@ -1,3 +1,8 @@
+---
+name: activity-log-reviewer
+description: "Consulta y resume registros de tiempo (time logs) y la actividad de Zoho Sprints."
+---
+
 # Command: Activity & Log Reviewer
 
 ## Descripción
