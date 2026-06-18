@@ -13,5 +13,7 @@ description: "Orquesta e integra múltiples KPIs en un reporte ejecutivo de spri
      * Llama a `c3_billable_ratio` para el ratio de facturación.
      * Llama a `c3_task_delays` para listar las tareas retrasadas.
   2. Integra todos los datos en un informe estructurado.
-  3. Llama a `obsidian_put_content` escribiendo el reporte en Obsidian como una nota técnica en formato de dashboard ejecutivo.
+  3. Llama a `obsidian_put_content` pasando los parámetros requeridos:
+     * `filepath` (la ruta absoluta o relativa en el vault al archivo `.md` del dashboard executive)
+     * `content` (el reporte executive estructurado en formato Markdown)
   4. Muestra el reporte final al usuario.

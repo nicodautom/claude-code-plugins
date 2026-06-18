@@ -26,7 +26,7 @@ El agente debe recuperar de su memoria persistente o contexto de sesión los ide
 ### 2. Resolve Active Sprint ID (`sprintId`)
 * **Entrada:** `projectId`.
 * **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetSprints` con `teamId`, `projectId`, y parámetros `action="data"`, `index=1`, `range=50`, y `type="2"` (donde tipo 2 indica Sprint Activo).
+  1. Llama a `ZohoSprints_GetSprints` con `teamId`, `projectId`, y parámetros `action="data"`, `index=1`, `range=50`, y `type="[2]"` (en formato de string de array JSON para representar el tipo de Sprint Activo).
   2. Extrae el `sprintId` del sprint activo devuelto.
 
 ### 3. Resolve Backlog Sprint ID (`sprintId`)
@@ -60,3 +60,11 @@ El agente debe recuperar de su memoria persistente o contexto de sesión los ide
 * **Flujo de Acción:**
   1. Llama a `ZohoSprints_GetChecklistGroups` con `teamId`, `projectId`, `sprintId`, e `itemId`. Busca el `clGroupId` correspondiente al nombre del grupo.
   2. Llama a `ZohoSprints_GetChecklists` con `teamId`, `projectId`, `sprintId`, `itemId` y `clGroupId` para mapear el `clItemId` individual.
+
+### 7. Resolve Module ID (`moduleId`) for Comments
+* **Entrada:** `projectId`.
+* **Flujo de Acción:**
+  1. Para comentarios asociados a tareas (work items), se utiliza por defecto el ID de módulo global de Zoho Sprints: `"61978000000002009"`.
+  2. Alternativamente, para verificar o resolver IDs de otros módulos, llama a `ZohoSprints_GetProjectDetails` con `teamId`, `projectId` y el parámetro de consulta `action="details"`. 
+  3. En la respuesta, inspecciona la propiedad `"moduleIdvsLayoutId"` para obtener el mapa de IDs de módulo de ese proyecto.
+
