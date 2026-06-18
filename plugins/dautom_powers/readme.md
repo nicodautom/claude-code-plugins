@@ -8,22 +8,21 @@ El plugin está estructurado de la siguiente forma:
 
 - **`.claude-plugin/`**: Contiene la configuración y metadatos del plugin.
   - `plugin.json`: Metadatos generales (nombre, versión, descripción, autor).
-- **`commands/`**: Define los comandos que Claude puede recibir, junto con una explicación de qué herramientas de los servidores MCP de Zoho y Obsidian debe usar ("How To").
-  - `knowledge_retrieval.md`: Búsqueda avanzada y consulta en Obsidian.
-  - `daily_report.md`: Generación automática de reportes de final de día.
-  - `time_activity_logger.md`: Registro rápido de horas (asociado a tareas o general).
-  - `sprint_project_overview.md`: Resumen general del sprint y tareas asignadas.
-  - `task_status_manager.md`: Cambio de estados y comentarios en Zoho Sprints.
-  - `activity_log_reviewer.md`: Revisión y sumatoria de horas y actividades del día/semana.
-- **`skills/`**: Contiene las instrucciones paso a paso detalladas que le explican a Claude exactamente cómo procesar la información y ejecutar cada comando.
-  - `knowledge_retrieval/SKILL.md`
-  - `daily_report/SKILL.md`
-  - `time_activity_logger/SKILL.md`
-  - `sprint_project_overview/SKILL.md`
-  - `task_status_manager/SKILL.md`
-  - `activity_log_reviewer/SKILL.md`
 - **`agents/`**: Define el perfil, comportamiento, tono y directrices del agente que interactuará con el usuario.
   - `dautom_manager.md`: Perfil del agente "Dautom Manager".
+- **`skills/`**: Contiene la estructura de skills en árbol (enrutadores y módulos de ejecución):
+  - **`dautom_router/`**: Enrutador central que clasifica la intención del usuario ante consultas generales o ambiguas.
+  - **`case0/`**: Módulo de resolución de dependencias, mapeando nombres comunes a IDs técnicos de Zoho Sprints de forma silenciosa.
+  - **Sub-enrutadores de Casos:**
+    - `case1/`: Sub-ruteador para el Caso 1 (Daily or status report).
+    - `case2/`: Sub-ruteador para el Caso 2 (Documentation and logs).
+    - `case3/`: Sub-ruteador para el Caso 3 (KPIs report).
+    - `case4/`: Sub-ruteador para el Caso 4 (Ask Dautom / Obsidian).
+  - **Skills de Escenario (Hojas de Ejecución):**
+    - `c1_*`: 5 skills específicas de escenarios para reportes diarios y de sprints.
+    - `c2_*`: 9 skills específicas de escenarios para registros, checklists y notas.
+    - `c3_*`: 6 skills específicas de escenarios para KPIs y dashboards.
+    - `c4_*`: 4 skills específicas de escenarios para búsquedas y consultas cruzadas en Obsidian.
 
 ## Servidores MCP Utilizados
 
