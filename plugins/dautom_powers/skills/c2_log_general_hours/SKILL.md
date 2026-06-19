@@ -2,24 +2,21 @@
 name: c2_log_general_hours
 description: "Registra horas dedicadas a actividades generales de un proyecto (reuniones, capacitaciones, etc.) en Zoho y documenta en Obsidian."
 ---
-
-# Escenario: Log General Hours
-
-* **Intención:** "Log 1.5 non-billable hours today for sync meeting"
-* **Dependencias:** Llama a la skill interna `case0` para obtener el `projectId`.
-* **Flujo de Acción:**
-  1. Calcula la fecha actual o relativa (ej. "ayer") consultando la hora del sistema en los metadatos y formatea la fecha a `YYYY-MM-DD`. Convierte la duración al formato `HH:MM`.
-  2. Llama a `ZohoSprints_AddGeneralLogHours` utilizando:
+# Log General Hours
+* **Intención:** Registrar tiempo en una actividad general del proyecto.
+* **Dependencias:** `case0` para `projectId`, `userId`, `teamId`.
+* **Acciones:**
+  1. Calcula fecha (`YYYY-MM-DD` basada en sistema) y duración (`HH:MM`).
+  2. Llama a `ZohoSprints_AddGeneralLogHours` con:
      * `path_variables`: `teamId`, `projectId`
-     * `query_params`:
-       - `logtitle` (título del log, ej. "Sync meeting")
-       - `duration` (duración en formato `HH:MM`, ej. "01:30")
-       - `date` (fecha en formato `YYYY-MM-DD`)
-       - `users` (ID del usuario, obtenido de la sesión o del contexto en `case0`)
-       - `isbillable` (entero: `0` para no-facturable, `1` para facturable; mapear según la petición del usuario)
-       - `notes` (opcional, descripción del log de tiempo)
-  3. Llama a `obsidian_append_content` utilizando:
-     * `query_params`:
-       - `filepath` (la ruta absoluta o relativa en el vault al archivo `.md` de la nota diaria)
-       - `content` (la línea de texto a añadir detallando las horas generales registradas)
-  4. Informa al usuario que las horas generales han sido registradas.
+     * `query_params`: `logtitle`, `date`, `duration`, `users` (userId), `isbillable` (entero), `notes` (opcional)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  3. Llama a `obsidian_append_content` con:
+     * `query_params`: `filepath` (nota diaria), `content` (registro)
+  4. Confirma el registro.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

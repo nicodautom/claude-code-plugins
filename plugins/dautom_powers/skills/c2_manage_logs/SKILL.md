@@ -2,24 +2,29 @@
 name: c2_manage_logs
 description: "Edita los detalles de un log de horas existente o elimina el log en Zoho Sprints, actualizando la documentación local en Obsidian."
 ---
-
-# Escenario: Edit or Delete Logged Hours
-
-* **Intención:** "Delete my 2-hour log from yesterday on task #102" / "Edit my log"
-* **Dependencias:** Llama a la skill interna `case0` para resolver `projectId` e `itemId`.
-* **Flujo de Acción:**
-  1. Si la solicitud no especifica un `logId`, llama a `ZohoSprints_GetItemLogHours` con los siguientes parámetros requeridos para recuperar la lista de logs de tiempo asociados a la tarea:
+# Edit or Delete Logged Hours
+* **Intención:** Editar o eliminar un registro de tiempo.
+* **Dependencias:** `case0` para `projectId`, `itemId`, `teamId`.
+* **Acciones:**
+  1. Si falta `logId`, llama a `ZohoSprints_GetItemLogHours` con:
      * `path_variables`: `teamId`, `projectId`, `itemId`
      * `query_params`: `action="data"`, `index=1`, `range=100`
-     Presenta los logs al usuario para que seleccione el ID.
-  2. **Acción de Eliminación:** Llama a `ZohoSprints_DeleteLogHours` utilizando:
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+     Presenta los logs para resolver el ID.
+  2. **Eliminación:** Llama a `ZohoSprints_DeleteLogHours` con:
      * `path_variables`: `teamId`, `projectId`
-     * `query_params`: `action="deletelogs"`, `logidarr=[logId]` (ID del log a eliminar en formato de texto)
-  3. **Acción de Edición:** Llama a `ZohoSprints_UpdateLogHours` utilizando:
+     * `query_params`: `action="deletelogs"`, `logidarr` (ej. `"[ID]"`)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  3. **Edición:** Llama a `ZohoSprints_UpdateLogHours` con:
      * `path_variables`: `teamId`, `projectId`, `logId`
-     * `query_params`: `action="updatelog"` y los campos opcionales a modificar (`duration` en formato `HH:MM`, `notes`, `date` en formato `YYYY-MM-DD`).
-  4. Llama a `obsidian_append_content` utilizando:
-     * `query_params`:
-       - `filepath` (la ruta absoluta o relativa en el vault al archivo `.md` de la nota diaria)
-       - `content` (la línea de texto a añadir detallando la modificación o eliminación realizada)
+     * `query_params`: `action="updatelog"`, `duration` (HH:MM), `notes`, `date` (YYYY-MM-DD)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  4. Llama a `obsidian_append_content` con:
+     * `query_params`: `filepath` (nota diaria), `content` (detalle)
   5. Reporta el resultado.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

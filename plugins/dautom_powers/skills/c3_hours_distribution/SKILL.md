@@ -1,16 +1,20 @@
 ---
 name: c3_hours_distribution
-description: "Calcula y presenta la distribución de esfuerzo (horas logueadas) de los usuarios entre los proyectos activos."
+description: "Analiza la distribución de horas registradas por proyecto y tipo de log (tarea vs general)."
 ---
-
-# Escenario: Project-wise Hours Distribution
-
-* **Intención:** "Show me the distribution of hours logged per project for this quarter"
-* **Dependencias:** Llama a la skill interna `case0` para obtener la lista de proyectos y sus IDs.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetProjects` para listar proyectos activos del workspace.
-  2. Para cada proyecto activo de la lista, llama a `ZohoSprints_GetLogHours` utilizando los siguientes parámetros requeridos:
+# Hours Distribution
+* **Intención:** Distribución de horas registradas.
+* **Dependencias:** `case0` para `projectId`, `teamId`.
+* **Acciones:**
+  1. Llama a `ZohoSprints_GetLogHours` con:
      * `path_variables`: `teamId`, `projectId`
-     * `query_params`: `action="data"`, `listviewtype=0` (vista por fecha), `logtypes="[0,1,2]"` (string de array JSON para incluir todos los tipos de logs), `index=1`, `range=250`.
-  3. Suma las horas totales registradas en cada proyecto dentro del rango de fechas.
-  4. Presenta una tabla porcentual que muestre la distribución de esfuerzo del equipo entre proyectos.
+     * `query_params`: `action="data"`, `listviewtype=0`, `logtypes="[0,2]"`, `index=1`, `range=250`
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  2. Clasifica y agrupa las horas registradas por tipo de log y por usuario.
+  3. Presenta el resumen analítico.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

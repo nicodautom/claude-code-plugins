@@ -2,13 +2,17 @@
 name: c4_meeting_minutes
 description: "Busca y resume actas de reuniones o compromisos de un cliente en el vault de Obsidian."
 ---
+# Retrieve Meeting Minutes
+* **Intención:** Buscar y resumir minutas/actas de reuniones de clientes.
+* **Acciones:**
+  1. Llama a `obsidian_complex_search` con:
+     * `query_params`: `query` (objeto JsonLogic para filtrar por tipo de archivo, contenido y ruta del cliente)
+  2. Llama a `obsidian_get_file_contents` con:
+     * `query_params`: `filepath` (ruta de la minuta seleccionada)
+  3. Extrae y presenta compromisos, decisiones, responsables y fechas.
 
-# Escenario: Retrieve Meeting Minutes
-
-* **Intención:** "Find the minutes of the kick-off meeting with Client X"
-* **Flujo de Acción:**
-  1. Llama a `obsidian_complex_search` utilizando:
-     * `query_params`: `query` (un objeto JsonLogic estructurado para filtrar por tipo de archivo, contenido y ruta, ej. `{"and": [{"glob": ["*.md", {"var": "path"}]}, {"regexp": [".*Client X.*", {"var": "content"}]}]}`)
-  2. Llama a `obsidian_get_file_contents` utilizando:
-     * `query_params`: `filepath` (la ruta absoluta o relativa en el vault al archivo `.md` de la minuta de reunión resuelta en el paso anterior)
-  3. Resume los compromisos principales, decisiones clave, responsables y fechas detallados en la nota y se los presenta al usuario.
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

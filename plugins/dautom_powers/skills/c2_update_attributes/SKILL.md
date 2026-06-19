@@ -2,17 +2,23 @@
 name: c2_update_attributes
 description: "Modifica atributos específicos de una tarea (puntos de estimación, prioridad, asignados) en Zoho Sprints."
 ---
-
-# Escenario: Update Task Attributes
-
-* **Intención:** "Change the priority of task #5678 to High" / "Change estimations"
-* **Dependencias:** Llama a la skill interna `case0` para obtener `projectId`, `sprintId` e `itemId`, así como IDs de prioridad si aplica.
-* **Flujo de Acción:**
-  1. Si se modifica la prioridad, llama a `ZohoSprints_GetProjectPriorities` utilizando:
+# Update Task Attributes
+* **Intención:** Cambiar estimación, prioridad o asignados en tarea.
+* **Dependencias:** `case0` para `projectId`, `sprintId`, `itemId`, `teamId`.
+* **Acciones:**
+  1. Si cambia prioridad, llama a `ZohoSprints_GetProjectPriorities` con:
      * `path_variables`: `teamId`, `projectId`
      * `query_params`: `action="data"`, `index=1`, `range=100`
-     Esto permite obtener el `projpriorityid` correspondiente.
-  2. Llama a `ZohoSprints_UpdateItem` utilizando:
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+     Obtén `projpriorityid`.
+  2. Llama a `ZohoSprints_UpdateItem` con:
      * `path_variables`: `teamId`, `projectId`, `sprintId`, `itemId`
-     * `query_params` / `body` (según se envíen en la herramienta): los campos a modificar, tales como `point` (puntos de estimación, entero), `projpriorityid` (ID de prioridad), `newusers` o `delusers` (ID de asignados).
-  3. Muestra una confirmación detallando los atributos actualizados.
+     * `query_params` / `body` (según herramienta): `point` (puntos), `projpriorityid`, `newusers`, `delusers` (opcional)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  3. Muestra confirmación.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

@@ -2,13 +2,17 @@
 name: c4_cross_reference
 description: "Busca y asocia especificaciones técnicas o notas en Obsidian vinculadas a una tarea o proyecto de Zoho Sprints."
 ---
+# Cross-Context Reference Lookup
+* **Intención:** Buscar notas o especificaciones asociadas a una tarea de Zoho Sprints.
+* **Dependencias:** `case0` para obtener título y descripción del item en Zoho Sprints.
+* **Acciones:**
+  1. Llama a `obsidian_simple_search` con:
+     * `query_params`: `query` (ID numérico de la tarea o palabras clave del título del item)
+  2. Lee y presenta las notas y especificaciones técnicas correspondientes.
+  3. Si no hay coincidencia directa, realiza una búsqueda general del proyecto en Obsidian.
 
-# Escenario: Cross-Context Reference Lookup
-
-* **Intención:** "Are there any technical guides or meeting notes in Obsidian for task #1234?"
-* **Dependencias:** Llama a la skill interna `case0` para obtener la información detallada (título, descripción) del item en Zoho Sprints.
-* **Flujo de Acción:**
-  1. Utiliza el ID técnico y palabras clave del título del item de Zoho para realizar una búsqueda utilizando `obsidian_simple_search` con:
-     * `query_params`: `query` (el texto de búsqueda, ej. "#1234" o palabras clave del título de la tarea)
-  2. Si se encuentran coincidencias directas, lee las notas y presenta las guías técnicas correspondientes.
-  3. Si no hay coincidencias directas, realiza una búsqueda temática sobre el proyecto para proveer documentación general.
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

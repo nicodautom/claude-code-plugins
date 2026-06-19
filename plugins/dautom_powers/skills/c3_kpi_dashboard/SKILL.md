@@ -2,18 +2,18 @@
 name: c3_kpi_dashboard
 description: "Orquesta e integra múltiples KPIs en un reporte ejecutivo de sprint consolidado y lo guarda en Obsidian."
 ---
+# Sprint KPI Dashboard
+* **Intención:** Generar un dashboard ejecutivo consolidado de KPIs.
+* **Dependencias:** `case0` para `projectId`, `sprintId`.
+* **Acciones:**
+  1. Ejecuta analíticas de forma secuencial: `c3_total_hours`, `c3_billable_ratio` y `c3_task_delays`.
+  2. Integra los resultados en un reporte Markdown unificado.
+  3. Llama a `obsidian_put_content` con:
+     * `query_params`: `filepath` (nota de destino del dashboard), `content` (reporte Markdown consolidado).
+  4. Muestra el dashboard ejecutivo al usuario.
 
-# Escenario: Sprint KPI Dashboard
-
-* **Intención:** "Generate the KPI dashboard for Sprint 5"
-* **Dependencias:** Llama a la skill interna `case0` para obtener `projectId` y `sprintId`.
-* **Flujo de Acción:**
-  1. Invoca secuencialmente las mediciones analíticas:
-     * Llama a `c3_total_hours` para obtener el total del sprint.
-     * Llama a `c3_billable_ratio` para el ratio de facturación.
-     * Llama a `c3_task_delays` para listar las tareas retrasadas.
-  2. Integra todos los datos en un informe estructurado.
-  3. Llama a `obsidian_put_content` pasando los parámetros requeridos:
-     * `filepath` (la ruta absoluta o relativa en el vault al archivo `.md` del dashboard executive)
-     * `content` (el reporte executive estructurado en formato Markdown)
-  4. Muestra el reporte final al usuario.
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

@@ -1,16 +1,20 @@
 ---
 name: c3_total_hours
-description: "Calcula el total de horas acumuladas registradas por el equipo o usuario en un periodo de tiempo en Zoho Sprints."
+description: "Suma y reporta el total de horas registradas en un periodo para un proyecto o sprint."
 ---
-
-# Escenario: Total Logged Hours Tracking
-
-* **Intención:** "Show me the total hours logged by the team this week"
-* **Dependencias:** Llama a la skill interna `case0` para obtener el `projectId` y el `userId` de compañeros si aplica.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetLogHours` utilizando `teamId` y el `projectId` resuelto, con los siguientes parámetros requeridos:
+# Total Logged Hours Tracking
+* **Intención:** Obtener total de horas registradas en un rango de fechas.
+* **Dependencias:** `case0` para `projectId`, `teamId`.
+* **Acciones:**
+  1. Llama a `ZohoSprints_GetLogHours` con:
      * `path_variables`: `teamId`, `projectId`
-     * `query_params`: `action="data"`, `listviewtype=0` (vista por fecha), `logtypes="[0,1,2]"` (string de array JSON para incluir logs de tareas, reuniones y generales), `index=1`, `range=250`.
-  2. Filtra la respuesta por usuario o rango de fechas si se requiere.
-  3. Convierte y suma las duraciones (`HH:MM` a formato decimal).
-  4. Muestra el total estructurado en una tabla de texto.
+     * `query_params`: `action="data"`, `listviewtype=0`, `logtypes="[0,1,2]"`, `index=1`, `range=250`
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  2. Filtra por fechas y suma todas las duraciones.
+  3. Muestra el total de horas.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

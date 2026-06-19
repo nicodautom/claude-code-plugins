@@ -2,16 +2,20 @@
 name: c1_personal_summary
 description: "Genera el reporte diario personal cruzando Zoho Sprints y Obsidian."
 ---
-
-# Escenario: Personal Daily Summary
-
-* **Intención:** "Show me my daily status report today" / "Qué hice hoy"
-* **Dependencias:** Consulta y delega de manera silenciosa en `case0` para obtener el `projectId` del proyecto actual (o proyectos activos) y asegurar que el `teamId` y `userId` estén cargados.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetLogHours` utilizando `teamId` y el `projectId` resuelto, con los siguientes parámetros requeridos:
+# Personal Daily Summary
+* **Intención:** Obtener resumen diario personal de actividades.
+* **Dependencias:** `case0` para `projectId`, `teamId`, `userId`.
+* **Acciones:**
+  1. Llama a `ZohoSprints_GetLogHours` con:
      * `path_variables`: `teamId`, `projectId`
-     * `query_params`: `action="data"`, `listviewtype=1` (vista por usuario), `logtypes="[0,1,2]"` (string de array JSON que incluye logs de item, meeting y general), `index=1`, `range=100`.
-  2. Filtra los logs devueltos por el `userId` del usuario de sesión y la fecha de hoy.
-  3. Llama a `obsidian_get_periodic_note` con `period="daily"` y `type="content"` para recuperar la nota diaria local.
-  4. Compara y cruza la información para generar un reporte que consolide las tareas y horas de Zoho con las notas tomadas en Obsidian.
-  5. Muestra la información de forma estructurada.
+     * `query_params`: `action="data"`, `listviewtype=1`, `logtypes="[0,1,2]"`, `index=1`, `range=100`
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  2. Filtra por `userId` del usuario y la fecha actual.
+  3. Llama a `obsidian_get_periodic_note` con `query_params`: `period="daily"`.
+  4. Cruza y muestra el reporte consolidado de Zoho y Obsidian.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

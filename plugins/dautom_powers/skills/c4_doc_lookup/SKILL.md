@@ -2,14 +2,17 @@
 name: c4_doc_lookup
 description: "Busca y recupera explicaciones, guías o documentación de un término o concepto en Obsidian."
 ---
+# Concept / Documentation Lookup
+* **Intención:** Buscar y leer documentación técnica sobre un concepto en Obsidian.
+* **Acciones:**
+  1. Llama a `obsidian_simple_search` con:
+     * `query_params`: `query` (término o concepto a buscar)
+  2. Llama a `obsidian_batch_get_file_contents` con:
+     * `query_params`: `filepaths` (lista JSON de rutas de los mejores resultados de coincidencia, máximo 5)
+  3. Extrae las definiciones clave de las notas y las presenta con enlaces clicables (`[Nombre](file:///...)`).
 
-# Escenario: Concept / Documentation Lookup
-
-* **Intención:** "Search Dautom documentation for the deployment guide of the billing module"
-* **Flujo de Acción:**
-  1. Llama a `obsidian_simple_search` utilizando:
-     * `query_params`: `query` (el concepto o término a buscar, ej. "deployment guide billing module")
-  2. Llama a `obsidian_batch_get_file_contents` utilizando:
-     * `query_params`: `filepaths` (una lista JSON/array de rutas absolutas de archivos con mejores puntuaciones de coincidencia, máximo 5)
-  3. Sintetiza y extrae las definiciones principales de la documentación recuperada.
-  4. Muestra la respuesta al usuario con enlaces clicables a los archivos correspondientes en Obsidian (`[Nombre](file:///...)`).
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

@@ -2,69 +2,45 @@
 name: case0
 description: "Módulo de resolución de dependencias y mapeo de IDs técnicos de Zoho Sprints (proyectos, sprints, tareas, épicas y checklists)."
 ---
-
 # Caso 0: Resolving Context and Dependencies
+Mapea nombres y referencias generales a identificadores técnicos de Zoho Sprints.
 
-Esta skill interna define las instrucciones y los flujos de herramientas MCP requeridos para mapear nombres comunes a IDs técnicos de Zoho Sprints.
+## 📌 Contexto Inicial
+* **Workspace ID (`teamId`):** ID obtenido del contexto o sesión de Zoho Sprints.
+* **User ID (`userId`):** ID del usuario actual de Zoho Sprints.
+* **Cabeceras Obligatorias:** Para toda llamada de Zoho Sprints, incluye siempre: `headers={"x-za-ui-version": "v2", "X-convert-response": "true"}`.
 
-## 📌 Contexto Global
-El agente debe recuperar de su memoria persistente o contexto de sesión los identificadores iniciales:
-* **Workspace ID (`teamId`):** ID del espacio de trabajo de Zoho Sprints.
-* **User ID (`userId`):** ID técnico del usuario de Zoho.
+## 📋 Resolución de Identificadores
 
----
+### 1. Proyecto (`projectId`)
+* Llama a `ZohoSprints_GetProjects` con: `path_variables={"teamId"}` y `query_params={"action": "data", "index": 1, "range": 100}`.
+* Busca por nombre en la propiedad `name`.
 
-## 📋 Escenarios de Resolución de IDs
+### 2. Sprint Activo (`sprintId`)
+* Llama a `ZohoSprints_GetSprints` con: `path_variables={"teamId", "projectId"}` y `query_params={"action": "data", "index": 1, "range": 50, "type": "[2]"}`.
 
-### 1. Resolve Project ID (`projectId`) by Name
-* **Entrada:** Nombre del Proyecto.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetProjects` con el `teamId` y parámetros `action="data"`, `index=1`, `range=100`, y `searchvalue=[Nombre del Proyecto]`.
-  2. Filtra la lista para encontrar la coincidencia exacta o más cercana en la propiedad `name`.
-  3. Extrae y almacena el `projectId` en memoria.
+### 3. Backlog (`sprintId` para Backlog)
+* Llama a `ZohoSprints_GetProjectDetails` con: `path_variables={"teamId", "projectId"}` y `query_params={"action": "getbacklog"}`.
+* Extrae la propiedad `backlogId`.
 
-### 2. Resolve Active Sprint ID (`sprintId`)
-* **Entrada:** `projectId`.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetSprints` con `teamId`, `projectId`, y parámetros `action="data"`, `index=1`, `range=50`, y `type="[2]"` (en formato de string de array JSON para representar el tipo de Sprint Activo).
-  2. Extrae el `sprintId` del sprint activo devuelto.
+### 4. Tarea (`itemId`)
+* Llama a `ZohoSprints_GetItems` con: `path_variables={"teamId", "projectId", "sprintId"}` y `query_params={"action": "data", "index": 1, "range": 250}`.
+* Si es referencia (ej. "#ID"), busca en `itemNo`. Si es texto, busca en `itemName`.
 
-### 3. Resolve Backlog Sprint ID (`sprintId`)
-* **Entrada:** `projectId`.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetProjectDetails` con `teamId`, `projectId`, y parámetro `action="getbacklog"`.
-  2. Extrae el ID único asignado al backlog del proyecto para usarlo como `sprintId`.
+### 5. Épica (`epicId`)
+* Llama a `ZohoSprints_GetEpics` con: `path_variables={"teamId", "projectId"}` y `query_params={"action": "data", "index": 1, "range": 100}`.
+* Busca por nombre en la propiedad `name`.
 
-### 4. Resolve Item ID (`itemId`) by Name or Reference
-* **Entrada:** `projectId` (opcional), `sprintId` (opcional), Referencia de Tarea (ej. "#123") o Nombre de la Tarea.
-* **Flujo de Acción:**
-  1. Si `projectId` y `sprintId` no se especifican en la consulta del usuario, asume por defecto el proyecto activo configurado en la memoria de contexto de sesión del agente.
-  2. Si no hay un proyecto activo en memoria o no se encuentra la tarea en él, llama a `ZohoSprints_GetProjects` para obtener la lista de proyectos activos de la cuenta actual e itera en sus sprints activos buscando el item.
-  3. Llama a `ZohoSprints_GetItems` con el `teamId` de sesión, el `projectId` resuelto, el `sprintId` resuelto, y el parámetro `searchvalue=[Referencia o Nombre]`.
-  4. Si es una referencia numérica (ej. #123), busca la coincidencia exacta con la propiedad `key`. Si es texto, realiza una búsqueda en los nombres de tarea devueltos.
-  5. Recupera y almacena el `itemId`.
+### 6. Grupo de Checklist (`clGroupId`) y Sub-item (`clItemId`)
+* Llama a `ZohoSprints_GetChecklistGroups` con: `path_variables={"teamId", "projectId", "sprintId", "itemId"}` y `query_params={"action": "data", "index": 1, "range": 100}` para `clGroupId`.
+* Llama a `ZohoSprints_GetChecklists` con: `path_variables={"teamId", "projectId", "sprintId", "itemId", "clGroupId"}` y `query_params={"action": "data", "index": 1, "range": 100}` para `clItemId`.
 
-## ⏱️ Reglas de Contexto de Tiempo y Fechas
-* Para calcular fechas relativas (ej. "ayer", "el lunes pasado", "hace dos días"), debes usar siempre como base la fecha y hora del sistema provista en tus metadatos iniciales de sesión.
-* Convierte las fechas calculadas al formato estricto `YYYY-MM-DD` antes de utilizarlas en cualquier llamada MCP de Zoho Sprints.
-* Convierte las duraciones de tiempo a formato de hora estricto `HH:MM` (ej. 3.5h -> "03:30", 45m -> "00:45").
+### 7. Módulo (`moduleId`) para Comentarios
+* Usa el ID predeterminado de tareas: `"61978000000002009"`.
+* Alternativamente, lee las llaves de `moduleIdvsLayoutId` en `ZohoSprints_GetProjectDetails` con `action="details"`.
 
-### 5. Resolve Epic ID (`epicId`) by Name
-* **Entrada:** `projectId`, Nombre de la Épica.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetEpics` con `teamId`, `projectId`, y parámetro `searchvalue=[Nombre de la Épica]`.
-  2. Mapea la épica y extrae su `epicId` correspondiente.
-
-### 6. Resolve Checklist Group ID (`clGroupId`) and Item ID (`clItemId`)
-* **Entrada:** `projectId`, `sprintId`, `itemId`, Nombre de Grupo de Checklist y Nombre del Item.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetChecklistGroups` con `teamId`, `projectId`, `sprintId`, e `itemId`. Busca el `clGroupId` correspondiente al nombre del grupo.
-  2. Llama a `ZohoSprints_GetChecklists` con `teamId`, `projectId`, `sprintId`, `itemId` y `clGroupId` para mapear el `clItemId` individual.
-
-### 7. Resolve Module ID (`moduleId`) for Comments
-* **Entrada:** `projectId`.
-* **Flujo de Acción:**
-  1. Para comentarios asociados a tareas (work items), se utiliza por defecto el ID de módulo global de Zoho Sprints: `"61978000000002009"`.
-  2. Alternativamente, para verificar o resolver IDs de otros módulos, llama a `ZohoSprints_GetProjectDetails` con `teamId`, `projectId` y el parámetro de consulta `action="details"`. 
-  3. En la respuesta, inspecciona la propiedad `"moduleIdvsLayoutId"` para obtener el mapa de IDs de módulo de ese proyecto.
-
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

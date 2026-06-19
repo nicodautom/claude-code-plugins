@@ -2,20 +2,26 @@
 name: c2_task_transition
 description: "Modifica el estado de una tarea y permite reasignar la misma en Zoho Sprints."
 ---
-
-# Escenario: Task Status Transition
-
-* **Intención:** "Move task #4321 to 'In Review' and assign it to [Nombre]"
-* **Dependencias:** Llama a la skill interna `case0` para obtener `projectId`, `sprintId`, e `itemId`, así como el `userId` del nuevo asignado si aplica.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_GetItemDetails` utilizando:
+# Task Status Transition
+* **Intención:** Cambiar estado o reasignar una tarea.
+* **Dependencias:** `case0` para `projectId`, `sprintId`, `itemId`, `userId`, `teamId`.
+* **Acciones:**
+  1. Llama a `ZohoSprints_GetItemDetails` con:
      * `path_variables`: `teamId`, `projectId`, `sprintId`, `itemId`
      * `query_params`: `action="details"`
-     Esto verifica que el estado de destino sea válido dentro del flujo de estados.
-  2. Llama a `ZohoSprints_UpdateItem` utilizando:
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  2. Llama a `ZohoSprints_UpdateItem` con:
      * `path_variables`: `teamId`, `projectId`, `sprintId`, `itemId`
-     * `query_params` / `body` (según se envíen en la herramienta): `statusid` (ID del nuevo estado) y opcionalmente `newusers` (IDs de los asignados) o `delusers`.
-  3. (Opcional) Llama a `ZohoSprints_AddItemComment` para agregar un comentario que notifique el cambio utilizando:
-     * `path_variables`: `teamId`, `projectId`, `itemId`, `moduleId` (usa `"61978000000002009"` por ser el ID predeterminado para el módulo de items en Zoho Sprints)
-     * `query_params`: `action="addnotes"`, `name` (el texto del comentario, ej. "Move task #4321 to 'In Review'")
-  4. Informa del cambio realizado.
+     * `query_params` / `body` (según herramienta): `statusid` (nuevo estado), `newusers` o `delusers` (opcional, asignados)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  3. (Opcional) Llama a `ZohoSprints_AddItemComment` con:
+     * `path_variables`: `teamId`, `projectId`, `itemId`, `moduleId` (usa `"61978000000002009"`)
+     * `query_params`: `action="addnotes"`, `name` (comentario)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  4. Muestra la confirmación.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

@@ -24,3 +24,9 @@ Clasifica la intención del usuario y delega la ejecución de inmediato a la ski
    * **[3] KPIs Analytics** (`/dautom:case3`): Analiza el cumplimiento del objetivo del 70% de horas facturables (billable target), evalúa la velocidad del equipo o detecta tareas retrasadas.
    * **[4] Ask Dautom** (`/dautom:case4`): Realiza búsquedas temáticas y consultas cruzadas en tu base de conocimientos de Obsidian para consolidar guías, minutas de reuniones, especificaciones y documentación técnica.
    * *Pregunta al usuario:* *"¿Cuál de estas áreas o casos de uso deseas ejecutar hoy?"*
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.

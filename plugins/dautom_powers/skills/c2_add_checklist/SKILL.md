@@ -2,21 +2,23 @@
 name: c2_add_checklist
 description: "Crea grupos de checklists y asocia sub-items a una tarea en Zoho Sprints."
 ---
-
-# Escenario: Add Checklists to Tasks
-
-* **Intención:** "Add a checklist to task #1234 with steps: 'Verify logs', 'Run security scan'"
-* **Dependencias:** Llama a la skill interna `case0` para obtener `projectId`, `sprintId` e `itemId`.
-* **Flujo de Acción:**
-  1. Llama a `ZohoSprints_AddChecklistGroup` utilizando:
+# Add Checklists to Tasks
+* **Intención:** Agregar grupo y sub-items de checklist a una tarea.
+* **Dependencias:** `case0` para `projectId`, `sprintId`, `itemId`, `userId`, `teamId`.
+* **Acciones:**
+  1. Llama a `ZohoSprints_AddChecklistGroup` con:
      * `path_variables`: `teamId`, `projectId`, `sprintId`, `itemId`
-     * `query_params`: `action="data"`, `clgroupname` (nombre de grupo descriptivo, ej. "Tareas de verificación")
-     Obtén el `clGroupId` resultante de la respuesta.
-  2. Para cada sub-item solicitado por el usuario, llama a `ZohoSprints_AddChecklist` utilizando:
+     * `query_params`: `action="addclgroup"`, `clgroupname` (nombre del grupo)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+     Obtén el `clGroupId` resultante.
+  2. Para cada sub-item solicitado, llama a `ZohoSprints_AddChecklist` con:
      * `path_variables`: `teamId`, `projectId`, `sprintId`, `itemId`, `clGroupId`
-     * `query_params`: 
-       - `clitemname` (el texto de la tarea/paso del checklist)
-       - `ownerid` (ID de usuario asignado, por defecto el `userId` obtenido del contexto)
-       - `priority` (entero: 0 para Ninguna, 1 para Baja, 2 para Media, 3 para Alta; por defecto usar 1)
-       - `visibility` (entero: 0 para Público, 1 para Privado; por defecto usar 0)
-  3. Muestra una confirmación del checklist agregado.
+     * `query_params`: `clitemname` (texto), `ownerid` (userId), `priority` (entero 0-3), `visibility` (entero 0-1)
+     * `headers`: `x-za-ui-version="v2"`, `X-convert-response="true"`
+  3. Muestra confirmación.
+
+## 🛑 Debugging y Fallos
+Si la lógica falla, faltan prerrequisitos o una herramienta MCP da error:
+1. **Detén la ejecución** inmediatamente.
+2. **No adivines ni inventes datos** (IDs, parámetros o rutas).
+3. **Reporta al usuario** el paso fallido con el error y solicita instrucciones.
